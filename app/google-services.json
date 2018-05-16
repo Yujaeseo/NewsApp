@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "26155172801",
+    "firebase_url": "https://newsfeedapp-41f8d.firebaseio.com",
+    "project_id": "newsfeedapp-41f8d",
+    "storage_bucket": "newsfeedapp-41f8d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:26155172801:android:3edc76eb36c9cce1",
+        "android_client_info": {
+          "package_name": "com.example.antena.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "26155172801-vqgftbvkiiveleu3u25q80m5hv744vbv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3XYCPFQD52mkOSrIFB4MQTbCrX4ZYnOs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
