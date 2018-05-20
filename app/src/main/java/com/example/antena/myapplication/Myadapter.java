@@ -162,4 +162,5 @@ public class Myadapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void setOnRecyclerViewItemClickListener (OnRecyclerViewItemClickListener onRecyclerViewItemClickListener){
         this.onRecyclerViewItemClickListener = onRecyclerViewItemClickListener;
     }
+    
 }

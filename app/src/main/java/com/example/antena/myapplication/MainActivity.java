@@ -81,13 +81,20 @@ public class MainActivity extends AppCompatActivity  {
                 mAdapter = new Myadapter(myDataset, new Myadapter.OnRecyclerViewItemClickListener() {
                     @Override
                     public void onItemClick(int position, View view,String url) {
-                        Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(url));
-                        startActivity(viewIntent);
+// load url not using webview
+/*                        Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(url));
+                        startActivity(viewIntent);*/
+                        Intent intent = new Intent(MainActivity.this,Webviewactivity.class);
+                        intent.putExtra("newsUrl",url);
+                        startActivity(intent);
 
                     }
                 });
+
                 mRecyclerView.setAdapter(mAdapter);
+
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w(TAG,"loadArticle : onCancelled",databaseError.toException());

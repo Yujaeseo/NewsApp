@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    >
+
+    <com.example.antena.myapplication.CustomWebView
+        android:id="@+id/testWebView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+    </com.example.antena.myapplication.CustomWebView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom"
+        >
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/bottomWebViewToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#181a29"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme" />
+
+        <com.example.antena.myapplication.CustomWebViewBottom
+            android:id="@+id/bottomWebView"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+        </com.example.antena.myapplication.CustomWebViewBottom>
+
+    </LinearLayout>
+
+
+</FrameLayout>
