@@ -1,14 +1,20 @@
 package com.example.antena.myapplication;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+import android.support.v7.widget.SearchView;
 
 import static android.view.MotionEvent.INVALID_POINTER_ID;
 
@@ -20,11 +26,12 @@ public class Webviewactivity extends AppCompatActivity {
     private int mActivePointerId = INVALID_POINTER_ID;
     private float mLastTouchY = -1;
 
+    //private LinearLayoutCompat test;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webviewactivity);
-        
         String url = getIntent().getStringExtra("newsUrl");
         myWebView = (CustomWebView) findViewById(R.id.testWebView);
         myWebView.setWebViewClient(new WebViewClient(){
@@ -36,7 +43,6 @@ public class Webviewactivity extends AppCompatActivity {
         });
 
         bottomWebView = findViewById(R.id.bottomWebView);
-
         bottomWebView.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading (WebView view, String url){
@@ -48,11 +54,53 @@ public class Webviewactivity extends AppCompatActivity {
         // https://stackoverflow.com/questions/48403090/webview-not-working-properly
         myWebView.loadUrl(url);
         //webview.loadUrl("javascript:highlightSelection()");
-        bottomWebView.loadUrl("http://dic.naver.com/");
+        //bottomWebView.loadUrl("http://dic.naver.com/");
+        bottomWebView.loadUrl("http://endic.naver.com/?sLn=kr");
         mToolbar = findViewById(R.id.bottomWebViewToolbar);
+        setSupportActionBar(mToolbar);
         mToolbar.setOnTouchListener(new ToolbarTouchListener());
-        bottomWebView.requestDisallowInterceptTouchEvent(true);
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+
+        //bottomWebView.requestDisallowInterceptTouchEvent(true);
+        CustomWebViewBottom.searchView = findViewById(R.id.searchView);
+        CustomWebViewBottom.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //String redirectUrl = "http://endic.naver.com/search.nhn?sLn=kr&searchOption=all&query=" + query;
+                //bottomWebView.loadUrl(redirectUrl);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //String redirectUrl = "http://endic.naver.com/search.nhn?sLn=kr&dicQuery="+newText+"&x=0&y=0&query="+newText+ "&target=endic&ie=utf8&query_utf=&isOnlyViewEE=N";
+                String redirectUrl = "http://endic.naver.com/search.nhn?sLn=kr&searchOption=all&query=" + newText;
+                bottomWebView.loadUrl(redirectUrl);
+                return true;
+            }
+        });
+        //test = findViewById(R.id.test);
+        //test.setVisibility(View.GONE);
+        // layoutparameter 설정해 주어야 한다.
+    }
+
+
+    // 툴바 메뉴 생성
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu){
+        getMenuInflater().inflate(R.menu.custommenu,menu);
+        return true;
+    }
+    // 툴바 메뉴 클릭시 이벤트 정의하기
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        // 정의하기
+        return true;
     }
 
     private class MycustomView extends WebViewClient {
@@ -104,8 +152,11 @@ public class Webviewactivity extends AppCompatActivity {
                     int height = displayMetrics.heightPixels;
 
                     // position change
-                    if (layoutParams.height - (int)dy <= 100 || layoutParams.height - (int)dy >= height - 200)
+                    if ((layoutParams.height - (int)dy <= 0) || (layoutParams.height - (int)dy >= height - 200) ) {
+                        Log.w("test",Integer.toString(mToolbar.getMeasuredHeight()));
                         break;
+                    }
+
                     layoutParams.height -= (int)dy;
                     bottomWebView.setLayoutParams(layoutParams);
                     bottomWebView.invalidate();
@@ -149,5 +200,11 @@ public class Webviewactivity extends AppCompatActivity {
             return true;
         }
 
+    }
+
+    public void saveWordAndMeaning (){
+        String test;
+        bottomWebView.executeFindwordScript();
+        test = bottomWebView.getWordAndMeaning();
     }
 }

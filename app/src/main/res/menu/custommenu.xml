@@ -5,5 +5,5 @@
         android:title="highlight" />
     <item
         android:id="@+id/addwordButton"
-        android:title="add" />
+        android:title="@android:string/search_go" />
 </menu>

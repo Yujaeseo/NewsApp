@@ -10,10 +10,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.support.v4.widget.DrawerLayout;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.FirebaseApiNotAvailableException;
@@ -40,6 +42,10 @@ public class MainActivity extends AppCompatActivity  {
     private DatabaseReference ref;
     private static final String TAG = "Item";
 
+    private String[] mListItems;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -48,6 +54,12 @@ public class MainActivity extends AppCompatActivity  {
 
         database = FirebaseDatabase.getInstance();
         ref = database.getReference("news");
+
+        mListItems = getResources().getStringArray(R.array.drawerItemArray);
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,R.layout.drawer_list_item,mListItems));
 
         myDataset = new ArrayList<Item>();
 

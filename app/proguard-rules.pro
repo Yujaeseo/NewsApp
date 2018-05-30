@@ -30,3 +30,5 @@
 -keepclassmembers class com.yourcompany.models.** {
   *;
 }
+# searchview
+-keep class android.support.v7.widget.SearchView { *; }

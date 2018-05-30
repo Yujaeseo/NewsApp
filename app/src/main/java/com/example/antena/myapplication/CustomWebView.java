@@ -1,5 +1,6 @@
 package com.example.antena.myapplication;
 
+import android.app.Activity;
 import android.content.Context;
 import android.drm.DrmStore;
 import android.util.AttributeSet;
@@ -13,6 +14,7 @@ import android.view.ViewParent;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.support.v7.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.jar.Attributes;
@@ -44,6 +46,7 @@ public class CustomWebView extends WebView {
     }
 
     public CustomWebView(Context context, AttributeSet attrs){
+
         super(context,attrs);
         this.context = context;
         WebSettings webSettings = this.getSettings();
@@ -70,7 +73,18 @@ public class CustomWebView extends WebView {
 
         @JavascriptInterface
         public void getText (String text){
-            Toast.makeText(context,text, Toast.LENGTH_SHORT).show();
+            Activity activity = (Activity) context;
+            final CharSequence cs = text;
+
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    CustomWebViewBottom.searchView.setQuery (cs,false);
+                    CustomWebViewBottom.searchView.clearFocus();
+
+                }
+            });
         }
     }
 
@@ -104,7 +118,8 @@ public class CustomWebView extends WebView {
                     CustomWebView.this.loadUrl("javascript:JavaScriptInterface.getText(window.getSelection().toString())");
                     break;
                 case R.id.highlightButton:
-
+                    ((Webviewactivity)CustomWebView.this.context).saveWordAndMeaning();
+                    //CustomWebView.this.loadUrl("javascript:JavaScriptInterface.getMeaning(document.querySelector(\"div#content span.fnt_e30 strong\").innerText)");
                     break;
             }
             return false;
