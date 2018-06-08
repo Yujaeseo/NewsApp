@@ -19,6 +19,7 @@ import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,6 +28,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -89,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signIn() {
+        // 구글에 먼저 유저 로그인과 관련된 요청을 보낸다
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -124,8 +131,45 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            final FirebaseUser user = mAuth.getCurrentUser();
                             //updateUI(user);
+                            // 파이어베이스 데이터베이스 유저 노드에 이벤트 리스너를 붙힌다. 그리고 존재하는 유저인지 확인
+
+                            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+                            final DatabaseReference userRef = rootRef.child("users").child(user.getUid());
+
+                            ValueEventListener eventListener = new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (!dataSnapshot.exists()){
+
+                                        User newUser = new User();
+                                        newUser.setUserName(user.getDisplayName());
+                                        newUser.setUserEmail(user.getEmail());
+
+                                        userRef.setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(LoginActivity.this,"유저 등록이 완료 되었습니다.",Toast.LENGTH_LONG).show();
+                                                }else{
+                                                    //실패
+                                                }
+                                            }
+                                        });
+
+                                    }else{
+
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {}
+                            };
+
+                            userRef.addListenerForSingleValueEvent(eventListener);
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

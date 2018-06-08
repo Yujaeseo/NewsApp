@@ -3,18 +3,6 @@
     <string name="wiki">위키</string>
     <string name="dictionary">사전</string>
     <string name="translator">번역</string>
-
-    <string-array name="drawerItemArray">
-        <item>
-            단어장
-        </item>
-        <item>
-            내 뉴스
-        </item>
-        <item>
-            언론사
-        </item>
-    </string-array>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
