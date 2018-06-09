@@ -29,7 +29,6 @@ public class Item {
         this.summary = summary;
         this.author = author;
         this.viewType = viewType;
-
     }
 
     public void setTopic(String topic) {

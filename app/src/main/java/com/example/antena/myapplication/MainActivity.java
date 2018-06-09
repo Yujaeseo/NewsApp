@@ -8,8 +8,10 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -67,17 +69,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView.LayoutManager mLayoutManager;
 
 
+
     private List<Item> myDataset;
     private ActionBarDrawerToggle mdrawerToggle;
     private FirebaseDatabase database;
     private DatabaseReference ref;
     private static final String TAG = "Item";
 
-    private String[] mListItems;
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
     private Toolbar mToolbar;
+
     private TabLayout mTabLayout;
+    private ViewPagerAdapter viewPagerAdapter;
+    private ViewPager viewPager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,69 +103,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setupFirebaseListener();
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mTabLayout = (TabLayout) findViewById(R.id.tablayout);
+
+        // add fragment
+        viewPagerAdapter.AddFragment(new FragmentTech(),"Tech");
+        viewPagerAdapter.AddFragment(new FragmentHard(),"Hard");
+        viewPagerAdapter.AddFragment(new FragmentApp(),"Apps");
+
+        viewPager.setAdapter(viewPagerAdapter);
+        mTabLayout.setupWithViewPager(viewPager);
 
         // 네비게이션 리스너 설정
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigationview);
         navigationView.setNavigationItemSelectedListener(this);
 
-        myDataset = new ArrayList<Item>();
-
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        ref.addValueEventListener( new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                // check practice https://firebase.googleblog.com/2014/04/best-practices-arrays-in-firebase.html?m=1
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-
-                    for (DataSnapshot article : child.getChildren()) {
-
-                        Item item = article.getValue(Item.class);
-
-                        if (item.getThumbnail().equals("None")) {
-                            item.setViewType(2);
-                        } else {
-                            item.setViewType(1);
-                        }
-
-                        myDataset.add(item);
-
-                    }
-                }
-
-                mAdapter = new Myadapter(myDataset, new Myadapter.OnRecyclerViewItemClickListener() {
-                    @Override
-                    public void onItemClick(int position, View view,String url) {
-// load url not using webview
-/*                        Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(url));
-                        startActivity(viewIntent);*/
-                        Intent intent = new Intent(MainActivity.this,Webviewactivity.class);
-                        intent.putExtra("newsUrl",url);
-                        startActivity(intent);
-
-                    }
-                });
-
-                mRecyclerView.setAdapter(mAdapter);
-
-            }
-
-
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(TAG,"loadArticle : onCancelled",databaseError.toException());
-            }
-        });
-
         initInstancesDrawer();
-
     }
-
 
 
     @Override
@@ -224,15 +185,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void initInstancesDrawer(){
 
         mToolbar = (Toolbar) findViewById(R.id.maintoolbar);
-        mTabLayout = (TabLayout) findViewById(R.id.tablayout);
         setSupportActionBar(mToolbar);
 
         mdrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,mToolbar, R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         mdrawerToggle.setDrawerIndicatorEnabled(true);
-
-        mTabLayout.addTab(mTabLayout.newTab().setText("Tab One"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("Tab Two"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("Tab Three"));
 
     }
 
@@ -261,3 +217,105 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 }
+
+
+
+
+
+
+
+
+
+// pager설정 전 oncreate 안에 내용
+
+/*
+        super.onCreate(savedInstanceState);
+                setContentView(R.layout.activity_main);
+
+                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+                mGoogleSignInClient = GoogleSignIn.getClient(this,gso);
+
+                database = FirebaseDatabase.getInstance();
+                ref = database.getReference("news");
+
+                setupFirebaseListener();
+
+                mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+                //mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+
+                viewPager = (ViewPager) findViewById(R.id.viewpager);
+                viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+                mTabLayout = (TabLayout) findViewById(R.id.tablayout);
+
+                // add fragment
+                viewPagerAdapter.AddFragment(new FragmentTech(),"Tech");
+                viewPagerAdapter.AddFragment(new FragmentHard(),"Hard");
+                viewPagerAdapter.AddFragment(new FragmentApp(),"Apps");
+
+                viewPager.setAdapter(viewPagerAdapter);
+                mTabLayout.setupWithViewPager(viewPager);
+
+
+
+                // 네비게이션 리스너 설정
+                NavigationView navigationView = (NavigationView) findViewById(R.id.navigationview);
+                navigationView.setNavigationItemSelectedListener(this);
+/*
+        myDataset = new ArrayList<Item>();
+
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        ref.addValueEventListener( new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                // check practice https://firebase.googleblog.com/2014/04/best-practices-arrays-in-firebase.html?m=1
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+
+                    for (DataSnapshot article : child.getChildren()) {
+
+                        Item item = article.getValue(Item.class);
+
+                        if (item.getThumbnail().equals("None")) {
+                            item.setViewType(2);
+                        } else {
+                            item.setViewType(1);
+                        }
+
+                        myDataset.add(item);
+
+                    }
+                }
+
+                mAdapter = new Myadapter(myDataset, new Myadapter.OnRecyclerViewItemClickListener() {
+                    @Override
+                    public void onItemClick(int position, View view,String url) {
+// load url not using webview
+//                        Intent viewIntent = new Intent("android.intent.action.VIEW", Uri.parse(url));
+//                        startActivity(viewIntent);
+                        Intent intent = new Intent(MainActivity.this,Webviewactivity.class);
+                        intent.putExtra("newsUrl",url);
+                        startActivity(intent);
+
+                    }
+                });
+
+                mRecyclerView.setAdapter(mAdapter);
+
+            }
+
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG,"loadArticle : onCancelled",databaseError.toException());
+            }
+        });
+                initInstancesDrawer();
+*/
