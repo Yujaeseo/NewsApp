@@ -94,6 +94,14 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.addAuthStateListener(mAuthListener);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //mainactivity로 이동한 후 back button 시 로그인 액티비티로 돌아오는 것을 막는다.
+        //매니페스트에도 설정 : android:noHistory="true"
+        finish();
+    }
+
     private void signIn() {
         // 구글에 먼저 유저 로그인과 관련된 요청을 보낸다
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);

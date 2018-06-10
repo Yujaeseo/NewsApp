@@ -5,9 +5,11 @@ public class Item {
     public static final int IMAGE_TYPE = 1;
     public static final int TEXT_TYPE = 2;
 
+
     private String topic;
     private String title;
     private String pubdate;
+    private long pubdate_ms;
     private String press;
     private String thumbnail;
     private String newsLink;
@@ -18,11 +20,12 @@ public class Item {
     //https://stackoverflow.com/questions/48405839/com-google-firebase-database-databaseexception
     public Item (){}
 
-    public Item (String topic, String title, String pubdate, String press, String thumbnail, String url,String summary,String author, int viewType){
+    public Item (String topic, String title, String pubdate, long pubdate_ms, String press, String thumbnail, String url,String summary,String author, int viewType){
 
         this.topic = topic;
         this.title = title;
         this.pubdate = pubdate;
+        this.pubdate_ms = pubdate_ms;
         this.press = press;
         this.thumbnail = thumbnail;
         this.newsLink = url;
@@ -42,6 +45,8 @@ public class Item {
     public void setPubdate(String pubdate) {
         this.pubdate = pubdate;
     }
+
+    public void setPubdate_ms(long pubdate_ms){this.pubdate_ms = pubdate_ms;}
 
     public void setPress(String press) {
         this.press = press;
@@ -66,6 +71,7 @@ public class Item {
     public void setauthor(String author) {
         this.author = author;
     }
+
     public String getTopic() {
         return topic;
     }
@@ -78,6 +84,8 @@ public class Item {
         return pubdate;
     }
 
+    public long getPubdate_ms () {return pubdate_ms;}
+
     public String getPress() {
         return press;
     }
@@ -85,9 +93,11 @@ public class Item {
     public String getThumbnail(){
         return thumbnail;
     }
+
     public String getNewsLink(){
         return newsLink;
     }
+
     public int getViewType (){
         return viewType;
     }
