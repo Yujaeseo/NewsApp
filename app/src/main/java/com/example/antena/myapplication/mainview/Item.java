@@ -1,4 +1,4 @@
-package com.example.antena.myapplication;
+package com.example.antena.myapplication.mainview;
 
 public class Item {
 
@@ -24,9 +24,9 @@ public class Item {
 
         this.topic = topic;
         this.title = title;
-        this.pubdate = pubdate;
+        this.pubdate = parsingPubdate(pubdate);
         this.pubdate_ms = pubdate_ms;
-        this.press = press;
+        this.press = firstCharUppercase(press);
         this.thumbnail = thumbnail;
         this.newsLink = url;
         this.summary = summary;
@@ -42,14 +42,12 @@ public class Item {
         this.title = title;
     }
 
-    public void setPubdate(String pubdate) {
-        this.pubdate = pubdate;
-    }
+    public void setPubdate(String pubdate) { this.pubdate = parsingPubdate(pubdate); }
 
     public void setPubdate_ms(long pubdate_ms){this.pubdate_ms = pubdate_ms;}
 
     public void setPress(String press) {
-        this.press = press;
+        this.press = firstCharUppercase(press);
     }
 
     public void setThumbnail(String thumbnail) {
@@ -108,5 +106,16 @@ public class Item {
 
     public String getauthor() {
         return author;
+    }
+
+    public String parsingPubdate (String pubdate) {
+        String [] splitted = pubdate.split("\\s+");
+        String displayedPubdate = splitted[1] + " " + splitted[2] + " " + splitted[3];
+        return displayedPubdate;
+    }
+
+    public String firstCharUppercase (String str){
+        char first = Character.toUpperCase(str.charAt(0));
+        return first + str.substring(1);
     }
 }

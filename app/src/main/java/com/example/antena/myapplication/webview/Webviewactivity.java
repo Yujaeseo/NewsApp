@@ -1,9 +1,9 @@
-package com.example.antena.myapplication;
+package com.example.antena.myapplication.webview;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -15,6 +15,19 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.support.v7.widget.SearchView;
+import android.widget.Toast;
+
+import com.example.antena.myapplication.R;
+import com.example.antena.myapplication.wordview.Word;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import static android.view.MotionEvent.INVALID_POINTER_ID;
 
@@ -26,12 +39,26 @@ public class Webviewactivity extends AppCompatActivity {
     private int mActivePointerId = INVALID_POINTER_ID;
     private float mLastTouchY = -1;
 
+    private DatabaseReference rootRef;
+    private DatabaseReference userRef;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
+
+    private static final String TAG = "WebviewActivity";
+
     //private LinearLayoutCompat test;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webviewactivity);
+
+        //파이어베이스 연결, 현재 접속 중인 해당 유저에 대한 reference를 가져온다.
+        rootRef = FirebaseDatabase.getInstance().getReference();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        userRef = rootRef.child("users").child(mFirebaseUser.getUid());
+
         String url = getIntent().getStringExtra("newsUrl");
         myWebView = (CustomWebView) findViewById(R.id.testWebView);
         myWebView.setWebViewClient(new WebViewClient(){
@@ -204,7 +231,61 @@ public class Webviewactivity extends AppCompatActivity {
 
     public void saveWordAndMeaning (){
         String test;
+        // 네이버 사전의 단어 의미와 뜻을 찾는다.
         bottomWebView.executeFindwordScript();
-        test = bottomWebView.getWordAndMeaning();
+        firebaseSaveWord();
+    }
+
+    public void firebaseSaveWord(){
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // 단어장 존재
+                if (dataSnapshot.child("word").exists()){
+                    // 단어장에 이미 단어가 추가되어있는 경우
+                    if (dataSnapshot.child("word").child(bottomWebView.getWord()).exists()) {
+                        Log.w("test",bottomWebView.getWord());
+                        Toast.makeText(Webviewactivity.this,"단어장에 이미 존재합니다.",Toast.LENGTH_LONG).show();
+                    }
+                    // 단어장에 해당 단어가 없는 경우 - > 추가
+                    else {
+                        firebaseAddWord();
+                    }
+                }
+                // 존재하지 않는 경우  -> 단어장 노드, 단어 추가
+                else{
+                    userRef.child("word").setValue(" ");
+                    firebaseAddWord();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        bottomWebView.setWordEmpty();
+        bottomWebView.setMeaningEmpty();
+
+    }
+
+    public void firebaseAddWord () {
+
+        if (bottomWebView.getMeaning().equals("")){
+            Toast.makeText(Webviewactivity.this,"단어 뜻을 직접 입력해야 합니다.",Toast.LENGTH_LONG).show();
+            // dialogue 띄우기.(추후에 개발)
+            return;
+        }
+
+        Word word = new Word(bottomWebView.getMeaning(),0);
+
+        userRef.child("word").child(bottomWebView.getWord()).setValue(word).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(Webviewactivity.this,"내 단어장에 추가되었습니다.",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

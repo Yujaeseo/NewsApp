@@ -1,26 +1,23 @@
-package com.example.antena.myapplication;
+package com.example.antena.myapplication.loginview;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.antena.myapplication.R;
+import com.example.antena.myapplication.mainview.MainActivity;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -33,10 +30,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.util.concurrent.TimeUnit;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -99,7 +92,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onPause();
         //mainactivity로 이동한 후 back button 시 로그인 액티비티로 돌아오는 것을 막는다.
         //매니페스트에도 설정 : android:noHistory="true"
-        finish();
     }
 
     private void signIn() {
@@ -137,6 +129,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
 
@@ -153,6 +146,7 @@ public class LoginActivity extends AppCompatActivity {
                                     if (!dataSnapshot.exists()){
 
                                         User newUser = new User();
+                                        // 객체 바꿔줘야 함 !!
                                         newUser.setUserName(user.getDisplayName());
                                         newUser.setUserEmail(user.getEmail());
 
@@ -185,7 +179,6 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
-
                         // ...
                     }
                 });

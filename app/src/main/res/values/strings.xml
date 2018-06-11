@@ -1,13 +1,20 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">TechToc</string>
     <string name="wiki">위키</string>
     <string name="dictionary">사전</string>
     <string name="translator">번역</string>
+    <string name="logout">로그아웃</string>
+    <string name="my_word_list">단어장</string>
+    <string name="yes_button">확인</string>
+    <string name="no_button">취소</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
+    <string name="add_word">단어장 추가</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_myword">MywordActivity</string>
+    <string name="title_activity_word">WordActivity</string>
 </resources>

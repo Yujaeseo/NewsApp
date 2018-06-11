@@ -1,4 +1,4 @@
-package com.example.antena.myapplication;
+package com.example.antena.myapplication.mainview;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.antena.myapplication.R;
+import com.example.antena.myapplication.webview.Webviewactivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class FragmentApp extends Fragment {
+public class FragmentHard extends Fragment {
 
     private static final int TOTAL_ITEM_EACH_LOAD = 30;
     private static final int HARD_ITEM_EACH_LOAD = 10;
@@ -41,12 +43,12 @@ public class FragmentApp extends Fragment {
     private LinearLayoutManager mLayoutManager;
     private FirebaseDatabase database;
     private DatabaseReference ref;
-    public FragmentApp() {}
+    public FragmentHard() {}
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.app_fragment,container,false);
+        v = inflater.inflate(R.layout.hard_fragment,container,false);
         return v;
     }
 
@@ -54,7 +56,7 @@ public class FragmentApp extends Fragment {
     public void onViewCreated(View view,Bundle savedInstanceState){
 
         myDataset = new ArrayList<Item>();
-        mRecyclerView = view.findViewById(R.id.app_recyclerView);
+        mRecyclerView = view.findViewById(R.id.hard_recyclerView);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -138,10 +140,9 @@ public class FragmentApp extends Fragment {
                         item.setViewType(1);
                     }
 
-                    if (item.getTopic().equals("App")){
+                    if (item.getTopic().equals("Hard")){
                         stackItem.push(item);
                     }
-
                 }
 
                 // Query가 마지막을 기준으로 특정 개수만큼 데이터를 가져올 때 오름차순으로 가져와서 stack을 이용해서 내림차순으로 데이터를 넣을 수 있도록 설정
@@ -192,3 +193,28 @@ public class FragmentApp extends Fragment {
         });
     }
 }
+
+/*
+                // check practice https://firebase.googleblog.com/2014/04/best-practices-arrays-in-firebase.html?m=1
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    int index = 0;
+                    for (DataSnapshot article : child.getChildren()) {
+
+                        Item item = article.getValue(Item.class);
+
+                        if (item.getTopic().equals("Hard")) {
+
+                            if (index++ >= 5)
+                                break;
+
+                            if (item.getThumbnail().equals("None")) {
+                                item.setViewType(2);
+                            } else {
+                                item.setViewType(1);
+                            }
+
+                            myDataset.add(item);
+                        }
+                    }
+                }
+*/

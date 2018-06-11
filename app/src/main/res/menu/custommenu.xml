@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/highlightButton"
-        android:title="highlight" />
+        android:title="@string/add_word" />
     <item
         android:id="@+id/addwordButton"
         android:title="@android:string/search_go" />

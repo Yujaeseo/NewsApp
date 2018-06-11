@@ -22,7 +22,7 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/cardViewBottomLayout"
             android:layout_width="match_parent"
-            android:layout_height="152dp">
+            android:layout_height="142dp">
 
             <TextView
                 android:id="@+id/topicView"
@@ -39,14 +39,17 @@
 
             <TextView
                 android:id="@+id/titleView"
+                android:minHeight="60dp"
                 android:layout_width="355dp"
-                android:layout_height="58dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:padding="10dp"
                 android:text="Title"
+                android:textColor="@android:color/black"
+                android:textSize="17sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.666"
@@ -56,8 +59,8 @@
 
             <TextView
                 android:id="@+id/pressView"
-                android:layout_width="99dp"
-                android:layout_height="21dp"
+                android:layout_width="73dp"
+                android:layout_height="19dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
@@ -72,8 +75,8 @@
 
             <TextView
                 android:id="@+id/dateView"
-                android:layout_width="135dp"
-                android:layout_height="22dp"
+                android:layout_width="107dp"
+                android:layout_height="20dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
@@ -81,25 +84,29 @@
                 android:text="Date"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.075"
+                app:layout_constraintHorizontal_bias="0.159"
                 app:layout_constraintStart_toEndOf="@+id/pressView"
-                app:layout_constraintTop_toBottomOf="@+id/titleView" />
+                app:layout_constraintTop_toBottomOf="@+id/titleView"
+                app:layout_constraintVertical_bias="0.521" />
 
-            <Button
+
+            <ImageButton
                 android:id="@+id/addButton"
-                android:layout_width="65dp"
-                android:layout_height="39dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="ADD"
+                android:background="@drawable/roundedbutton"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.714"
+                app:layout_constraintHorizontal_bias="0.752"
                 app:layout_constraintStart_toEndOf="@+id/dateView"
                 app:layout_constraintTop_toBottomOf="@+id/titleView"
-                app:layout_constraintVertical_bias="0.578" />
+                app:layout_constraintVertical_bias="0.578"
+                app:srcCompat="@drawable/plus" />
+
         </android.support.constraint.ConstraintLayout>
 
 

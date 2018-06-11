@@ -1,4 +1,7 @@
-package com.example.antena.myapplication;
+package com.example.antena.myapplication.loginview;
+
+import com.example.antena.myapplication.mainview.Item;
+import com.example.antena.myapplication.wordview.Word;
 
 import java.util.ArrayList;
 import java.util.List;

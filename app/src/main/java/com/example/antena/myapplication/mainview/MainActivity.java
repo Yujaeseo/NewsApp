@@ -1,79 +1,61 @@
-package com.example.antena.myapplication;
+package com.example.antena.myapplication.mainview;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
-import android.nfc.Tag;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 
-import com.google.android.gms.auth.api.Auth;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.antena.myapplication.loginview.LoginActivity;
+import com.example.antena.myapplication.R;
+import com.example.antena.myapplication.wordview.WordActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.Api;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
-import com.google.firebase.FirebaseApiNotAvailableException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Logger;
-import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
 
     //firebase
+
+    private FirebaseDatabase database;
+    private DatabaseReference ref;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
+    private DatabaseReference userRef;
+    private NavigationView navigationView;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
 
-
     private List<Item> myDataset;
     private ActionBarDrawerToggle mdrawerToggle;
-    private FirebaseDatabase database;
-    private DatabaseReference ref;
     private static final String TAG = "Item";
 
     private DrawerLayout mDrawerLayout;
@@ -83,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ViewPagerAdapter viewPagerAdapter;
     private ViewPager viewPager;
 
+    private TextView userNameView;
+    private TextView userEmailView;
+    private CircleImageView userImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,15 +75,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        database = FirebaseDatabase.getInstance();
+        ref = database.getReference("news");
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        userRef = ref.child("users").child(mFirebaseUser.getUid());
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this,gso);
-
-        database = FirebaseDatabase.getInstance();
-        ref = database.getReference("news");
 
         setupFirebaseListener();
 
@@ -117,10 +106,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mTabLayout.setupWithViewPager(viewPager);
 
         // 네비게이션 리스너 설정
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigationview);
+        navigationView = (NavigationView) findViewById(R.id.navigationview);
         navigationView.setNavigationItemSelectedListener(this);
 
         initInstancesDrawer();
+
+
     }
 
 
@@ -146,6 +137,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         mdrawerToggle.syncState();
+
+//https://stackoverflow.com/questions/33560219/in-android-how-to-set-navigation-drawer-header-image-and-name-programmatically-i
+        View v = navigationView.getHeaderView(0);
+        ((TextView)v.findViewById(R.id.name)).setText(mFirebaseUser.getDisplayName());
+        ((TextView)v.findViewById(R.id.email)).setText(mFirebaseUser.getEmail());
+        CircleImageView profileView = ((CircleImageView)v.findViewById(R.id.drawer_profile_image));
+
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.mipmap.ic_launcher);
+
+        Glide.with(profileView).load(mFirebaseUser.getPhotoUrl()).apply(options).into(profileView);
+
+        //userNameView.setText(mFirebaseUser.getDisplayName());
+        //userEmailView.setText(mFirebaseUser.getEmail());
 
     }
 
@@ -181,7 +188,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
     }
 
-
     private void initInstancesDrawer(){
 
         mToolbar = (Toolbar) findViewById(R.id.maintoolbar);
@@ -193,14 +199,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        item.setChecked(true);
+        //item.setChecked(true);
 
         switch (item.getItemId()){
 
+            case R.id.my_word_list: {
+                Intent intent = new Intent(MainActivity.this,WordActivity.class);
+                startActivity(intent);
+                break;
+            }
+
             case R.id.logout_button:{
+
                 Log.d(TAG,"attempting to sign out the user.");
                 //https://stackoverflow.com/questions/38707133/google-firebase-sign-out-and-forget-user-in-android-app
                 //firebase logout
@@ -210,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
             }
+
             // navigation drawer를 닫는다
         }
 

@@ -1,17 +1,19 @@
-package com.example.antena.myapplication;
+package com.example.antena.myapplication.mainview;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.antena.myapplication.R;
 
 import java.util.List;
 
@@ -31,7 +33,7 @@ public class Myadapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public TextView mDateView;
         public TextView mPressView;
         public ImageView mImageView;
-        public Button mAddButton;
+        public ImageButton mAddButton;
         public LinearLayout linearCardView;
 
         public ViewHolderImage (View v){
@@ -65,7 +67,8 @@ public class Myadapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public TextView mDateView;
         public TextView mPressView;
         public ImageView mImageView;
-        public Button mAddButton;
+        public ImageButton mAddButton;
+        public ConstraintLayout cardviewBottom;
 
         public ViewHolderText(View v){
             super(v);
@@ -77,6 +80,17 @@ public class Myadapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mImageView = v.findViewById(R.id.imageView);
             mAddButton = v.findViewById(R.id.addButton);
 
+            cardviewBottom = v.findViewById(R.id.cardViewBottomLayout);
+
+            cardviewBottom.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    if (onRecyclerViewItemClickListener != null){
+                        onRecyclerViewItemClickListener.onItemClick(getAdapterPosition(),v,mDataset.get(getAdapterPosition()).getNewsLink());
+                    }
+                }
+            });
         }
     }
 

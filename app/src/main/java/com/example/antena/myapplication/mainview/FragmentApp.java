@@ -1,9 +1,7 @@
-package com.example.antena.myapplication;
+package com.example.antena.myapplication.mainview;
 
 import android.content.Intent;
 import android.os.Handler;
-import android.provider.ContactsContract;
-import android.renderscript.Sampler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.antena.myapplication.R;
+import com.example.antena.myapplication.webview.Webviewactivity;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,9 +25,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class FragmentTech extends Fragment {
+public class FragmentApp extends Fragment {
 
-    private static final int TOTAL_ITEM_EACH_LOAD = 10;
+    private static final int TOTAL_ITEM_EACH_LOAD = 30;
+    private static final int HARD_ITEM_EACH_LOAD = 10;
     private long currentPage = 0 ;
     private int initCheck;
 
@@ -42,13 +43,12 @@ public class FragmentTech extends Fragment {
     private LinearLayoutManager mLayoutManager;
     private FirebaseDatabase database;
     private DatabaseReference ref;
-
-    public FragmentTech() {}
+    public FragmentApp() {}
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.tech_fragment,container,false);
+        v = inflater.inflate(R.layout.app_fragment,container,false);
         return v;
     }
 
@@ -56,7 +56,7 @@ public class FragmentTech extends Fragment {
     public void onViewCreated(View view,Bundle savedInstanceState){
 
         myDataset = new ArrayList<Item>();
-        mRecyclerView = view.findViewById(R.id.tech_recyclerView);
+        mRecyclerView = view.findViewById(R.id.app_recyclerView);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -77,7 +77,7 @@ public class FragmentTech extends Fragment {
                             Log.w("test","end");
                             loading = false;
                             Log.v("...", "Last Item Wow !");
-                            loadMoreData();
+                            loadData();
                         }
                     }
                 }
@@ -123,11 +123,11 @@ public class FragmentTech extends Fragment {
             Log.w("test","initcheck variable changed ");
             query = ref.orderByChild("pubdate_ms").limitToLast(TOTAL_ITEM_EACH_LOAD).endAt(currentPage - 1);
         }
-       query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             // 데이터베이스에 변경이 생겼을 때, 혹은 초기에 한번 불린다
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                int countInputItem = 0;
                 Item item;
                 Stack stackItem = new Stack();
 
@@ -140,12 +140,15 @@ public class FragmentTech extends Fragment {
                         item.setViewType(1);
                     }
 
-                    stackItem.push(item);
-                    //myDataset.add(item);
+                    if (item.getTopic().equals("App")){
+                        stackItem.push(item);
+                    }
+
                 }
 
                 // Query가 마지막을 기준으로 특정 개수만큼 데이터를 가져올 때 오름차순으로 가져와서 stack을 이용해서 내림차순으로 데이터를 넣을 수 있도록 설정
-                while(!stackItem.empty()){
+                while(!stackItem.empty() && countInputItem < 10){
+                    countInputItem += 1;
                     Item itemInStack = (Item) stackItem.peek();
                     currentPage = itemInStack.getPubdate_ms();
                     Log.w("test",Long.toString(currentPage));
@@ -164,6 +167,7 @@ public class FragmentTech extends Fragment {
                             startActivity(intent);
                         }
                     });
+
                     //Async하게 데이터를 가져오기 때문에 callback 안에서 어탭터, 리사이클러뷰를 설정해준다.
                     mRecyclerView.setAdapter(mAdapter);
                 }
@@ -188,9 +192,5 @@ public class FragmentTech extends Fragment {
                 Log.w("test","loadArticle : onCancelled",databaseError.toException());
             }
         });
-    }
-
-    private void loadMoreData(){
-        loadData();
     }
 }

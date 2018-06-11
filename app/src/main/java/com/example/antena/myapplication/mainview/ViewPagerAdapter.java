@@ -1,4 +1,4 @@
-package com.example.antena.myapplication;
+package com.example.antena.myapplication.mainview;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

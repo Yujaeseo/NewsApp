@@ -1,23 +1,19 @@
-package com.example.antena.myapplication;
+package com.example.antena.myapplication.webview;
 
 import android.app.Activity;
 import android.content.Context;
-import android.drm.DrmStore;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewParent;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.support.v7.widget.SearchView;
 import android.widget.Toast;
 
-import java.util.jar.Attributes;
+import com.example.antena.myapplication.R;
 
 public class CustomWebView extends WebView {
 
