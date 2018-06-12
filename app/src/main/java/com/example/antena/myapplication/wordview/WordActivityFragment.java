@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class WordActivityFragment extends Fragment {
     private  SwipeFlingAdapterView flingContainer;
 
     private TextToSpeech tts;
-
+    private Toast speakerToast ;
     public WordActivityFragment() {}
 
     @Override
@@ -98,7 +99,15 @@ public class WordActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View layout = inflater.inflate(R.layout.soundtoast,container);
+        speakerToast = new Toast(getActivity());
+        speakerToast.setGravity(Gravity.CENTER_VERTICAL,0,400);
+        speakerToast.setView(layout);
+        speakerToast.setDuration(Toast.LENGTH_SHORT);
+
         return inflater.inflate(R.layout.fragment_word, container, false);
+
     }
 
     @Override
@@ -166,14 +175,14 @@ public class WordActivityFragment extends Fragment {
                     // ,,,
                     }
                 });
-                Toast.makeText(getActivity(), "Left!",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "못외움!",Toast.LENGTH_SHORT).show();
             }
 
             // 외운 단어는 데이터베이스에서 지운다.
             @Override
             public void onRightCardExit(Object dataObject) {
 
-                Toast.makeText(getActivity(), "Right!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "단어 삭제",Toast.LENGTH_SHORT).show();
 
                 final Wordcard wordcard = (Wordcard) dataObject;
 
@@ -219,7 +228,8 @@ public class WordActivityFragment extends Fragment {
                 // 음성 읽기
                 Wordcard currentWordCard = (Wordcard) dataObject;
                 tts.speak((CharSequence)currentWordCard.getWord(), TextToSpeech.QUEUE_FLUSH,null,null);
-                Toast.makeText(getActivity(), "Clicked!",Toast.LENGTH_SHORT).show();
+                speakerToast.show();
+                //Toast.makeText(getActivity(), "Clicked",Toast.LENGTH_SHORT).show();
             }
         });
     }

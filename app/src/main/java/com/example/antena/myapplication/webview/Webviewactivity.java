@@ -1,10 +1,13 @@
 package com.example.antena.myapplication.webview;
 
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -13,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.support.v7.widget.SearchView;
 import android.widget.Toast;
@@ -116,7 +120,6 @@ public class Webviewactivity extends AppCompatActivity {
         // layoutparameter 설정해 주어야 한다.
     }
 
-
     // 툴바 메뉴 생성
     @Override
     public boolean onCreateOptionsMenu (Menu menu){
@@ -219,7 +222,6 @@ public class Webviewactivity extends AppCompatActivity {
                         mLastTouchY = pos [1];
                         mActivePointerId = event.getPointerId(newPointerIndex);
                     }
-
                     break;
                 }
             }
@@ -232,7 +234,9 @@ public class Webviewactivity extends AppCompatActivity {
     public void saveWordAndMeaning (){
         String test;
         // 네이버 사전의 단어 의미와 뜻을 찾는다.
+
         bottomWebView.executeFindwordScript();
+
         firebaseSaveWord();
     }
 
@@ -245,8 +249,13 @@ public class Webviewactivity extends AppCompatActivity {
                 if (dataSnapshot.child("word").exists()){
                     // 단어장에 이미 단어가 추가되어있는 경우
                     if (dataSnapshot.child("word").child(bottomWebView.getWord()).exists()) {
-                        Log.w("test",bottomWebView.getWord());
-                        Toast.makeText(Webviewactivity.this,"단어장에 이미 존재합니다.",Toast.LENGTH_LONG).show();
+                        if (bottomWebView.getWord() == ""){
+                            Toast.makeText(Webviewactivity.this,"인식되지 않는 단어입니다.",Toast.LENGTH_LONG).show();
+                            Log.w("test","인식되지 않음");
+                        }
+                        else{
+                            Toast.makeText(Webviewactivity.this,"단어장에 이미 존재합니다.",Toast.LENGTH_LONG).show();
+                        }
                     }
                     // 단어장에 해당 단어가 없는 경우 - > 추가
                     else {
@@ -275,17 +284,47 @@ public class Webviewactivity extends AppCompatActivity {
 
         if (bottomWebView.getMeaning().equals("")){
             Toast.makeText(Webviewactivity.this,"단어 뜻을 직접 입력해야 합니다.",Toast.LENGTH_LONG).show();
-            // dialogue 띄우기.(추후에 개발)
-            return;
+            // dialogue 띄우기.
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("단어 뜻을 입력해주세요.");
+
+            final EditText input = new EditText(this);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
+
+            builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {}
+            });
+
+            builder.setPositiveButton("추가", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                   Word word = new Word(input.getText().toString(),0);
+
+                    userRef.child("word").child(bottomWebView.getWord()).setValue(word).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(Webviewactivity.this,"내 단어장에 추가되었습니다.",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            });
+
+            builder.show();
+
         }
+        else{
+            Word word = new Word(bottomWebView.getMeaning(),0);
 
-        Word word = new Word(bottomWebView.getMeaning(),0);
-
-        userRef.child("word").child(bottomWebView.getWord()).setValue(word).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(Webviewactivity.this,"내 단어장에 추가되었습니다.",Toast.LENGTH_LONG).show();
-            }
-        });
+            userRef.child("word").child(bottomWebView.getWord()).setValue(word).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Toast.makeText(Webviewactivity.this,"내 단어장에 추가되었습니다.",Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 }
