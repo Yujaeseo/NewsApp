@@ -2,7 +2,9 @@ package com.example.antena.myapplication.webview;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +13,7 @@ import android.view.ViewParent;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.antena.myapplication.R;
@@ -20,6 +23,7 @@ public class CustomWebView extends WebView {
     private Context context;
     private ActionMode mActionmode;
     private ActionMode.Callback mActionModeCallback;
+    private SearchView searchView;
 
     /*
     public String Highlightscript = " <script type=\"text/javascript\">" +
@@ -34,7 +38,7 @@ public class CustomWebView extends WebView {
             "span.setAttribute(\"style\",\"display:block;background:#ffc570;\");"+
             "range.insertNode(span);}"+
             "</script> ";
-*/
+    */
 
     public CustomWebView(Context context){
         super(context);
@@ -47,6 +51,11 @@ public class CustomWebView extends WebView {
         this.context = context;
         WebSettings webSettings = this.getSettings();
         webSettings.setJavaScriptEnabled(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            this.setWebContentsDebuggingEnabled(true);
+        }
+
         this.addJavascriptInterface(new JavaScriptInterface(), "JavaScriptInterface");
         Toast.makeText(context,"단어를 검색하기 위해 화면을 길게 눌러주세요.",Toast.LENGTH_LONG).show();
 
@@ -63,6 +72,7 @@ public class CustomWebView extends WebView {
                 return true;
             }
         });
+
     }
 
     public class JavaScriptInterface {
@@ -76,8 +86,8 @@ public class CustomWebView extends WebView {
                 @Override
                 public void run() {
 
-                    CustomWebViewBottom.searchView.setQuery (cs,false);
-                    CustomWebViewBottom.searchView.clearFocus();
+                    searchView.setQuery (cs,true);
+                    searchView.clearFocus();
 
                 }
             });
@@ -86,6 +96,7 @@ public class CustomWebView extends WebView {
 
     @Override
     public ActionMode startActionMode (ActionMode.Callback callback){
+
         ViewParent parent = getParent();
         if (parent == null)
             return null;
@@ -127,4 +138,9 @@ public class CustomWebView extends WebView {
             mActionmode = null;
         }
     }
+
+    public void setSearchView (SearchView searchView) {
+        this.searchView = searchView;
+    }
+
 }

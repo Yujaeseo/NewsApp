@@ -7,6 +7,7 @@
     <string name="my_word_list">단어장</string>
     <string name="yes_button">확인</string>
     <string name="no_button">취소</string>
+    <string name="queryHint">검색</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

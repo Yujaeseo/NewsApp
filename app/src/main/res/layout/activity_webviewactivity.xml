@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,109 +10,28 @@
     <com.example.antena.myapplication.webview.CustomWebView
         android:id="@+id/testWebView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
     </com.example.antena.myapplication.webview.CustomWebView>
 
     <LinearLayout
         android:id="@+id/searchViewLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_gravity="bottom"
-        >
+        android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/bottomWebViewToolbar"
+        <com.example.antena.myapplication.webview.CustomToolbar
+            android:id="@+id/customToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#fbf9f9"
-            android:minHeight="?attr/actionBarSize"
-            android:paddingBottom="0dp"
-            android:theme="?attr/actionBarTheme">
+            android:layout_height="45dp"
+            app:contentInsetStart="0dp"></com.example.antena.myapplication.webview.CustomToolbar>
 
-            <android.support.v7.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.SearchView
-                    android:id="@+id/searchView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:actionViewClass="android.support.v7.widget.SearchView"
-                    app:iconifiedByDefault="false"></android.support.v7.widget.SearchView>
-
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-
-                    <RadioGroup
-                        android:id="@+id/test"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="0dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <RadioButton
-                            android:id="@+id/radioButton2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:scaleX="0.7"
-                            android:scaleY="0.7"
-                            android:text="@string/dictionary" />
-
-                        <RadioButton
-                            android:id="@+id/radioButton3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:scaleX="0.7"
-                            android:scaleY="0.7"
-                            android:text="@string/translator" />
-
-                        <RadioButton
-                            android:id="@+id/radioButton4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:scaleX="0.7"
-                            android:scaleY="0.7"
-                            android:text="@string/wiki" />
-                    </RadioGroup>
-
-                    <!--
-                    <ImageButton
-                        android:id="@+id/imageButton2"
-                        android:layout_width="53dp"
-                        android:layout_height="26dp"
-                        android:layout_margin="0dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/test"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@android:drawable/arrow_up_float" />
--->
-
-                </android.support.constraint.ConstraintLayout>
-
-
-            </android.support.v7.widget.LinearLayoutCompat>
-
-
-        </android.support.v7.widget.Toolbar>
 
         <com.example.antena.myapplication.webview.CustomWebViewBottom
             android:id="@+id/bottomWebView"
             android:layout_width="match_parent"
             android:layout_height="100dp">
-
         </com.example.antena.myapplication.webview.CustomWebViewBottom>
 
     </LinearLayout>
