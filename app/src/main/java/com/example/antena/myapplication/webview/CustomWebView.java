@@ -24,7 +24,7 @@ public class CustomWebView extends WebView {
     private ActionMode mActionmode;
     private ActionMode.Callback mActionModeCallback;
     private SearchView searchView;
-
+    static int AddWordAvailable = 1;
     /*
     public String Highlightscript = " <script type=\"text/javascript\">" +
             "function highlightSelection(){" +
@@ -125,7 +125,13 @@ public class CustomWebView extends WebView {
                     CustomWebView.this.loadUrl("javascript:JavaScriptInterface.getText(window.getSelection().toString())");
                     break;
                 case R.id.highlightButton:
-                    ((Webviewactivity)CustomWebView.this.context).saveWordAndMeaning();
+
+                    if (CustomWebView.AddWordAvailable == 1)
+                        ((Webviewactivity)CustomWebView.this.context).saveWordAndMeaning();
+                    else {
+                        Log.w("test", "단어 추가 중");
+                        Toast.makeText(context,"단어를 추가하는 중 입니다.",Toast.LENGTH_LONG).show();
+                    }
                     //CustomWebView.this.loadUrl("javascript:JavaScriptInterface.getMeaning(document.querySelector(\"div#content span.fnt_e30 strong\").innerText)");
                     break;
             }

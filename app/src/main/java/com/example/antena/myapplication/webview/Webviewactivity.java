@@ -153,6 +153,7 @@ public class Webviewactivity extends AppCompatActivity {
 
     public void saveWordAndMeaning (){
 
+        CustomWebView.AddWordAvailable = 0;
 
         myAsync = new AsyncTaskJavascript();
         myAsync.execute();
@@ -161,6 +162,7 @@ public class Webviewactivity extends AppCompatActivity {
         // 해당 유저 데이터베이스에 단어를 저장한다.
         //firebaseSaveWord();
     }
+
 
     public void firebaseSaveWord(){
 
@@ -171,9 +173,10 @@ public class Webviewactivity extends AppCompatActivity {
                 if (dataSnapshot.child("word").exists()){
                     // 단어장에 이미 단어가 추가되어있는 경우
                     if (dataSnapshot.child("word").child(bottomWebView.getWord()).exists()) {
-                        if (bottomWebView.getWord() == ""){
+                        if (bottomWebView.getWord().equals("")){
+
                             Toast.makeText(Webviewactivity.this,"인식되지 않는 단어입니다.",Toast.LENGTH_LONG).show();
-                            Log.w("test","인식되지 않음");
+                            Log.w("test","인식되지 않음" + ":" + bottomWebView.getWord());
                         }
                         else{
                             Toast.makeText(Webviewactivity.this,"단어장에 이미 존재합니다.",Toast.LENGTH_LONG).show();
@@ -181,6 +184,7 @@ public class Webviewactivity extends AppCompatActivity {
                     }
                     // 단어장에 해당 단어가 없는 경우 - > 추가
                     else {
+                        // ************************************************ 궁금한점 : 또 쓰레드가 분기 되나 ?? ***************************************************************************
                         firebaseAddWord();
                     }
                 }
@@ -189,6 +193,12 @@ public class Webviewactivity extends AppCompatActivity {
                     userRef.child("word").setValue(" ");
                     firebaseAddWord();
                 }
+
+                bottomWebView.setWordEmpty();
+                bottomWebView.setMeaningEmpty();
+
+                CustomWebView.AddWordAvailable = 1;
+
             }
 
             @Override
@@ -197,10 +207,10 @@ public class Webviewactivity extends AppCompatActivity {
             }
         });
 
-        bottomWebView.setWordEmpty();
-        bottomWebView.setMeaningEmpty();
+
     }
 
+    // 단어를 단어장에 추가
     public void firebaseAddWord () {
 
         if (bottomWebView.getMeaning().equals("")){
@@ -260,6 +270,7 @@ public class Webviewactivity extends AppCompatActivity {
                     bottomWebView.executeFindwordScript();
                 }
             });
+
             return null;
         }
 

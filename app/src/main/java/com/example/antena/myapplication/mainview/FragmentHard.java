@@ -83,16 +83,22 @@ public class FragmentHard extends Fragment {
                 }
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
 
         initCheck = 1;
         currentPage = 0;
 
         loadData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        /*
+        initCheck = 1;
+        currentPage = 0;
+
+        loadData();
+        */
         // 파이어베이스는 기본적으로 오름차순으로 정렬 따라서 최신 데이터를 가져오기 위해 뒤에서 부터 n개를 가져온다.
     }
 

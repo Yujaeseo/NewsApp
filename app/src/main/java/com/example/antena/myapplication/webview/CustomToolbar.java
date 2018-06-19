@@ -24,7 +24,6 @@ import static android.view.MotionEvent.INVALID_POINTER_ID;
 public class CustomToolbar extends Toolbar {
 
 
-
     private  static  final int MAX_CLICK_DURATION = 85;
     private long startClickTime;
 
@@ -88,29 +87,6 @@ public class CustomToolbar extends Toolbar {
 
         });
     }
-
-/*
-        CustomWebViewBottom.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                //String redirectUrl = "http://endic.naver.com/search.nhn?sLn=kr&searchOption=all&query=" + query;
-                //bottomWebView.loadUrl(redirectUrl);
-                String redirectUrl = "http://endic.naver.com/search.nhn?sLn=kr&searchOption=all&query=" + query;
-                bottomWebView.loadUrl(redirectUrl);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                //String redirectUrl = "http://endic.naver.com/search.nhn?sLn=kr&dicQuery="+newText+"&x=0&y=0&query="+newText+ "&target=endic&ie=utf8&query_utf=&isOnlyViewEE=N";
-                //String redirectUrl = "http://endic.naver.com/search.nhn?sLn=kr&searchOption=all&query=" + newText;
-                //bottomWebView.loadUrl(redirectUrl);
-                return true;
-            }
-
-        });
-        */
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {

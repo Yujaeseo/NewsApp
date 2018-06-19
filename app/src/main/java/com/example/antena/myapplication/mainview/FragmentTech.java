@@ -83,16 +83,24 @@ public class FragmentTech extends Fragment {
                 }
             }
         });
+
+        initCheck = 1;
+        currentPage = 0;
+        loadData();
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
+        /*
+        Oncreate 부분으로 옮김 -> 유저가 다른 섹션으로 옮겼다 혹은 기사를 보다가 다시 돌아와도 기존 스크롤이 진행되었던  지점으로 돌아옴. and Onnewintent가 실행되어도 데이터를 새로 받아오지 않음.
+        에러 발생하지 않으면 해당 주석 지우기
         initCheck = 1;
         currentPage = 0;
 
         loadData();
+        */
         // 파이어베이스는 기본적으로 오름차순으로 정렬 따라서 최신 데이터를 가져오기 위해 뒤에서 부터 n개를 가져온다.
     }
 
