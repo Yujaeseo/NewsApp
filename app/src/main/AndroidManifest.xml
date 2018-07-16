@@ -24,28 +24,34 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".webview.Webviewactivity" />
+        <activity
+            android:name=".webview.Webviewactivity"
+            android:theme="@style/Overlayactionbar" />
 
         <activity
+            android:name=".mainview.MainActivity">
+        </activity>
 
-            android:name=".mainview.MainActivity"
+        <activity
+            android:name=".searchview.Searchactivity"
+            android:label="@string/title_activity_searchactivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:launchMode="singleTop">
+
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
 
-            <meta-data android:name="android.app.searchable"
+            <meta-data
+                android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-
-
 
         <activity
             android:name=".wordview.WordActivity"
             android:label="@string/title_activity_word"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
-        </activity>
     </application>
 
 </manifest>

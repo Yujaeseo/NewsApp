@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class FragmentTech extends Fragment {
+public class FragmentTech extends Fragment implements Filter {
 
     private static final int TOTAL_ITEM_EACH_LOAD = 10;
     private long currentPage = 0 ;
@@ -64,6 +64,7 @@ public class FragmentTech extends Fragment {
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
                 if(dy > 0) //check for scroll down
                 {
                     visibleItemCount = mLayoutManager.getChildCount();
@@ -200,5 +201,10 @@ public class FragmentTech extends Fragment {
 
     private void loadMoreData(){
         loadData();
+    }
+
+    public void setFilter() {
+        Log.w("test","tech");
+        mAdapter.filterData();
     }
 }

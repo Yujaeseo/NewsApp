@@ -11,20 +11,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewParent;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import com.example.antena.myapplication.R;
+import com.github.ksoichiro.android.observablescrollview.ObservableWebView;
 
-public class CustomWebView extends WebView {
+public class CustomWebView extends ObservableWebView {
 
     private Context context;
     private ActionMode mActionmode;
     private ActionMode.Callback mActionModeCallback;
     private SearchView searchView;
+    private ProgressBar progressBar;
+    private Toolbar toolbar;
+
     static int AddWordAvailable = 1;
+
     /*
     public String Highlightscript = " <script type=\"text/javascript\">" +
             "function highlightSelection(){" +
@@ -52,13 +61,37 @@ public class CustomWebView extends WebView {
         WebSettings webSettings = this.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
+        this.setWebViewClient(new WebViewClient(){
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url)
+            {
+                return false;
+            }
+        });
+/*
+        this.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                progressBar.setVisibility(View.VISIBLE);
+                progressBar.setProgress(newProgress);
+
+                if (newProgress == 100){
+                    progressBar.setVisibility(GONE);
+                }
+
+                super.onProgressChanged(view,newProgress);
+
+            }
+        });
+        */
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             this.setWebContentsDebuggingEnabled(true);
         }
 
         this.addJavascriptInterface(new JavaScriptInterface(), "JavaScriptInterface");
         Toast.makeText(context,"단어를 검색하기 위해 화면을 길게 눌러주세요.",Toast.LENGTH_LONG).show();
-
+/*
         this.setOnLongClickListener(new View.OnLongClickListener(){
 
             @Override
@@ -72,6 +105,7 @@ public class CustomWebView extends WebView {
                 return true;
             }
         });
+*/
 
     }
 
@@ -94,17 +128,20 @@ public class CustomWebView extends WebView {
         }
     }
 
+/*
     @Override
     public ActionMode startActionMode (ActionMode.Callback callback){
 
         ViewParent parent = getParent();
         if (parent == null)
             return null;
-        //mActionModeCallback = new CustomActionModeCallback();
+
         mActionModeCallback = new CustomActionModeCallback();
         return parent.startActionModeForChild(this,mActionModeCallback);
     }
+*/
 
+/*
     private class CustomActionModeCallback implements ActionMode.Callback{
 
         @Override
@@ -121,10 +158,12 @@ public class CustomWebView extends WebView {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()){
-                case R.id.addwordButton:
+
+                case R.id.searchButton:
                     CustomWebView.this.loadUrl("javascript:JavaScriptInterface.getText(window.getSelection().toString())");
                     break;
-                case R.id.highlightButton:
+
+                case R.id.addWordButton:
 
                     if (CustomWebView.AddWordAvailable == 1)
                         ((Webviewactivity)CustomWebView.this.context).saveWordAndMeaning();
@@ -143,10 +182,15 @@ public class CustomWebView extends WebView {
             clearFocus();
             mActionmode = null;
         }
-    }
+    }*/
 
     public void setSearchView (SearchView searchView) {
         this.searchView = searchView;
     }
 
+    public void setToolbar (Toolbar toolbar){
+        this.toolbar = toolbar;
+    }
+
+    public void setProgressBar (ProgressBar progressBar) {this.progressBar = progressBar;}
 }

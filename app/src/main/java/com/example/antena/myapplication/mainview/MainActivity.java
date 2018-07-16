@@ -1,5 +1,6 @@
 package com.example.antena.myapplication.mainview;
 
+import android.support.v4.app.Fragment;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SearchEvent;
@@ -31,6 +33,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.antena.myapplication.loginview.LoginActivity;
 import com.example.antena.myapplication.R;
+import com.example.antena.myapplication.searchview.Searchactivity;
 import com.example.antena.myapplication.wordview.WordActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -46,8 +49,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
 
-    //firebase
+    private static final int SEARCH_BUTTON = Menu.FIRST;
 
+    //firebase
     private FirebaseDatabase database;
     private DatabaseReference ref;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -72,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TabLayout mTabLayout;
     private ViewPagerAdapter viewPagerAdapter;
     private ViewPager viewPager;
+    private Fragment currentFragment;
 
     private TextView userNameView;
     private TextView userEmailView;
@@ -102,13 +107,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.w("test",Integer.toString(position));
+                currentFragment = viewPagerAdapter.getRegisteredFragment(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mTabLayout = (TabLayout) findViewById(R.id.tablayout);
 
         // add fragment
+        currentFragment = new FragmentApp();
         viewPagerAdapter.AddFragment(new FragmentTech(),"Tech");
         viewPagerAdapter.AddFragment(new FragmentHard(),"Hard");
-        viewPagerAdapter.AddFragment(new FragmentApp(),"Apps");
+        viewPagerAdapter.AddFragment(currentFragment,"Apps");
 
         viewPager.setAdapter(viewPagerAdapter);
         mTabLayout.setupWithViewPager(viewPager);
@@ -118,10 +142,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         initInstancesDrawer();
-
-
     }
-
 
     @Override
     protected void onStart() {
@@ -236,37 +257,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mDrawerLayout.closeDrawers();
         return true;
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.searchicon,menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
+        menu.add(0,SEARCH_BUTTON, 0, "search").setIcon(R.drawable.iconsearch)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
-        // Assumes current activity is the searchable activity
-        SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(false);
-/*
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        */
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()){
+            case SEARCH_BUTTON:
+                Intent intent = new Intent(MainActivity.this,Searchactivity.class);
+                startActivity(intent);
+                break;
+        }
+
+        return false;
+    }
+
     // Activity의 OnResume이 다시 불린다. -> fragment의 데이터 다시 로딩
+/*
     @Override
     protected void onNewIntent(Intent intent) {
         setIntent(intent);
@@ -275,16 +292,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log.w("test", query);
+
+            ((Filter)currentFragment).setFilter();
         }
     }
+    */
 
 }
-
-
-
-
 
 
 // pager설정 전 oncreate 안에 내용

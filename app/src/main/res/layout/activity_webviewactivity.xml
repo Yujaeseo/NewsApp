@@ -1,40 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".mainview.MainActivity">
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/webview_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".mainview.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:elevation="5dp"
+        android:layout_height="66dp"
+        android:id="@+id/toolbarRelativeLayout"
+        android:background="@color/cardview_light_background">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/webview_activity_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/transparent"
+            android:layout_below="@+id/webview_activity_toolbar"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
 
     <com.example.antena.myapplication.webview.CustomWebView
         android:id="@+id/testWebView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="66dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     </com.example.antena.myapplication.webview.CustomWebView>
 
-    <LinearLayout
-        android:id="@+id/searchViewLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="vertical">
-
-        <com.example.antena.myapplication.webview.CustomToolbar
-            android:id="@+id/customToolbar"
+        <LinearLayout
+            android:id="@+id/searchViewLayout"
+            android:elevation="30dp"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            app:contentInsetStart="0dp"></com.example.antena.myapplication.webview.CustomToolbar>
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical">
 
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/bottomAppBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="5dp">
 
-        <com.example.antena.myapplication.webview.CustomWebViewBottom
-            android:id="@+id/bottomWebView"
-            android:layout_width="match_parent"
-            android:layout_height="100dp">
-        </com.example.antena.myapplication.webview.CustomWebViewBottom>
+                <com.example.antena.myapplication.webview.CustomToolbar
+                    android:id="@+id/customToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    app:contentInsetStart="0dp"></com.example.antena.myapplication.webview.CustomToolbar>
 
-    </LinearLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:background="@color/cardview_light_background">
 
+                    <ProgressBar
+                        android:id="@+id/bottomprogressBar"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp"
+                        android:layout_gravity="top"
+                        android:background="@android:color/transparent"
+                        android:visibility="gone" />
 
-</FrameLayout>
+                </FrameLayout>
+
+            </android.support.design.widget.AppBarLayout>
+
+            <com.example.antena.myapplication.webview.CustomWebViewBottom
+                android:id="@+id/bottomWebView"
+                android:layout_width="match_parent"
+                android:layout_height="100dp">
+            </com.example.antena.myapplication.webview.CustomWebViewBottom>
+
+        </LinearLayout>
+
+    </FrameLayout>
+

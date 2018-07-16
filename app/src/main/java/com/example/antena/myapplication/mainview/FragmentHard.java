@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class FragmentHard extends Fragment {
+public class FragmentHard extends Fragment implements Filter{
 
     private static final int TOTAL_ITEM_EACH_LOAD = 30;
     private static final int HARD_ITEM_EACH_LOAD = 10;
@@ -119,7 +119,9 @@ public class FragmentHard extends Fragment {
     }
 
     public void loadData() {
+
         Query query;
+
         // 초기에 프레그먼트가 resume 되었을 때 실행되는 query 정의(최근 데이터를 기준으로 정의된 개수만큼 가져온다)
         if (initCheck == 1) {
             query = ref.orderByChild("pubdate_ms").limitToLast(TOTAL_ITEM_EACH_LOAD);
@@ -129,6 +131,7 @@ public class FragmentHard extends Fragment {
             Log.w("test","initcheck variable changed ");
             query = ref.orderByChild("pubdate_ms").limitToLast(TOTAL_ITEM_EACH_LOAD).endAt(currentPage - 1);
         }
+
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             // 데이터베이스에 변경이 생겼을 때, 혹은 초기에 한번 불린다
             @Override
@@ -185,9 +188,7 @@ public class FragmentHard extends Fragment {
                             mAdapter.notifyDataSetChanged();
                         }
                     });
-
                 }
-
                 initCheck = 0;
                 loading = true;
             }
@@ -198,6 +199,12 @@ public class FragmentHard extends Fragment {
             }
         });
     }
+
+    public void setFilter() {
+        Log.w("test","hard");
+        mAdapter.filterData();
+    }
+
 }
 
 /*

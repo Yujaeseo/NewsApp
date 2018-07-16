@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/highlightButton"
+        android:id="@+id/addWordButton"
         android:title="@string/add_word" />
     <item
-        android:id="@+id/addwordButton"
+        android:id="@+id/searchButton"
         android:title="@android:string/search_go" />
 </menu>

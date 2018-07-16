@@ -176,5 +176,9 @@ public class Myadapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void setOnRecyclerViewItemClickListener (OnRecyclerViewItemClickListener onRecyclerViewItemClickListener){
         this.onRecyclerViewItemClickListener = onRecyclerViewItemClickListener;
     }
-    
+
+    public void filterData(){
+        this.mDataset.clear();
+        this.notifyDataSetChanged();
+    }
 }

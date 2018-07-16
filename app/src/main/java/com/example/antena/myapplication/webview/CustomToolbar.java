@@ -3,6 +3,7 @@ package com.example.antena.myapplication.webview;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Outline;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 
@@ -54,6 +56,7 @@ public class CustomToolbar extends Toolbar {
         init();
     }
 
+
     @SuppressLint("ClickableViewAccessibility")
     public void init(){
         LayoutInflater inflater =  (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -62,6 +65,26 @@ public class CustomToolbar extends Toolbar {
 
         searchView = v.findViewById(R.id.searchView);
         searchView.isSubmitButtonEnabled();
+
+//        bottomWebView.setProgressBar((ProgressBar) v.findViewById(R.id.bottomprogressBar));
+
+        if (bottomWebView == null)
+            Log.w("progre","s");
+/*
+        bottomWebView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                progressBar.setVisibility(View.VISIBLE);
+                progressBar.setProgress(newProgress);
+
+                if (newProgress == 100){
+                    progressBar.setVisibility(GONE);
+                }
+
+                super.onProgressChanged(view,newProgress);
+            }
+        });
+        */
 
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

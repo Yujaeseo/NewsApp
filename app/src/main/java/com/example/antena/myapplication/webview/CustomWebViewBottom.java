@@ -1,16 +1,23 @@
 package com.example.antena.myapplication.webview;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.support.v7.widget.SearchView;
 import android.widget.Toast;
@@ -19,11 +26,12 @@ import android.widget.Toolbar;
 import static android.view.MotionEvent.INVALID_POINTER_ID;
 
 public class CustomWebViewBottom extends WebView {
-
+    static boolean javascript = false;
     private Context context;
     static  SearchView searchView;
     private String word = "";
     private String meaning = "";
+    private int count = 0;
 
     // Javascript로 단어를 가져오는 부분 ->  2가지 경우 : 단어가 여러개 존재하는 경우, 1가지 의미만 적혀있는 경우
     private String javascriptFunction =  "function getFirstMeaning () {" +
@@ -52,35 +60,52 @@ public class CustomWebViewBottom extends WebView {
         this.context = context;
     }
 
-    public CustomWebViewBottom (Context context, AttributeSet attrs) {
+    public CustomWebViewBottom (final Context context, AttributeSet attrs) {
 
         super(context, attrs);
         this.context = context;
+
         WebSettings webSettings = this.getSettings();
         webSettings.setJavaScriptEnabled(true);
+
+        this.addJavascriptInterface(new JavaScriptInterface(), "JavaScriptInterface");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             this.setWebContentsDebuggingEnabled(true);
         }
 
-        this.addJavascriptInterface(new JavaScriptInterface(), "JavaScriptInterface");
+        this.setWebViewClient(new WebViewClient(){
 
+            @Override
+            public boolean shouldOverrideUrlLoading (WebView view, String url){
+                return false;
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                Toast.makeText(getContext(), "Oh no! " + error.getDescription(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public class JavaScriptInterface {
 
         @JavascriptInterface
         public void getWord(String text){
-            word += text;
-            Log.w("test",text);
+            word = text;
+            CustomWebViewBottom.this.post(new Runnable() {
+                @Override
+                public void run() {
+                    CustomWebViewBottom.this.loadUrl(getMeaningJavascript);
+                }
+            });
         }
 
         @JavascriptInterface
         public void getMeaning(String text) {
-            meaning += text;
-            Log.w("test",text);
+            meaning = text;
+            ((Webviewactivity)context).firebaseSaveWord(CustomWebViewBottom.this.getWord(),CustomWebViewBottom.this.getMeaning());
         }
-
     }
 
     public void executeFindwordScript (){
@@ -93,9 +118,7 @@ public class CustomWebViewBottom extends WebView {
         //참고 li 요소 list로 받아오기 : https://stackoverflow.com/questions/4019894/get-all-li-elements-in-array
 
         // 의미를 가져오는 자바스크립트를 실행시킨다.
-       this.loadUrl(getMeaningJavascript);
     }
-
 
     public String getWord(){
         return this.word;
@@ -114,25 +137,4 @@ public class CustomWebViewBottom extends WebView {
     }
 
 }
-
-  /*
-    @Override
-    public boolean dispatchTouchEvent (MotionEvent motion){
-
-        int toolbarHt = getChildAt(0).getHeight();
-
-
-        if (motion.getY() <= toolbarHt && motion.getActionMasked() == MotionEvent.ACTION_DOWN) {
-            mActivePointerId = motion.getPointerId(motion.getActionIndex());
-        }
-
-        if (mActivePointerId == motion.getPointerId(motion.getActionIndex()) )
-            return getChildAt(0).dispatchTouchEvent(motion);
-
-        else {
-            return super.dispatchTouchEvent(motion);
-        }
-
-    }
-    */
 

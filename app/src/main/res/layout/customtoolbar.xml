@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<android.support.constraint.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/cardview_light_background"
     android:layout_width="match_parent"
@@ -12,18 +12,14 @@
 
     <SearchView
         android:id="@+id/searchView"
-        android:theme="@style/Theme.AppCompat.Light"
-        android:queryHint="@string/queryHint"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:iconifiedByDefault="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.03" />
+        android:queryHint="@string/queryHint"
+        android:theme="@style/Theme.AppCompat.Light">
 
-</android.support.constraint.ConstraintLayout>
+    </SearchView>
+
+</FrameLayout>
 
 </merge>

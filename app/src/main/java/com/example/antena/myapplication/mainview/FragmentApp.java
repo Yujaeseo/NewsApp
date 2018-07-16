@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class FragmentApp extends Fragment {
+public class FragmentApp extends Fragment implements Filter {
 
     private static final int TOTAL_ITEM_EACH_LOAD = 30;
     private static final int HARD_ITEM_EACH_LOAD = 10;
@@ -199,5 +199,10 @@ public class FragmentApp extends Fragment {
                 Log.w("test","loadArticle : onCancelled",databaseError.toException());
             }
         });
+    }
+
+    public void setFilter() {
+        Log.w("test","app");
+       mAdapter.filterData();
     }
 }
