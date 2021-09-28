@@ -32,3 +32,7 @@
    * Beautifulsoup
 3. Javascript - 웹 상에 존재하는 단어 앱으로 읽어오기
 4. Firebase - 기사  및 유저 정보 저장
+
+## 이미지
+<img src="https://github.com/Yujaeseo/NewsApp/blob/master/image/News.gif" width="850" height="380">  
+
