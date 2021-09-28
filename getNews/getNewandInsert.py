@@ -17,8 +17,8 @@ from firebase_admin import credentials
 from firebase_admin import db
 
 #connect to firebase
-cred = credentials.Certificate('newsfeedapp-41f8d-firebase-adminsdk-xexxn-b2a904989d.json')
-firebase_admin.initialize_app(cred, {'databaseURL' : 'https://newsfeedapp-41f8d.firebaseio.com/'})
+cred = credentials.Certificate('--')
+firebase_admin.initialize_app(cred, {'--'})
 
 vect_tokenizer = TfidfVectorizer().build_analyzer()
 lemmatizer = WordNetLemmatizer()
