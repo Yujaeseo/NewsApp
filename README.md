@@ -35,5 +35,8 @@
 
 ## 이미지
 <img src="https://github.com/Yujaeseo/NewsApp/blob/master/image/News.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/Yujaeseo/NewsApp/blob/master/image/Search_word.gif">  
+
+
+
 <img src="https://github.com/Yujaeseo/NewsApp/blob/master/image/Search_word2.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://github.com/Yujaeseo/NewsApp/blob/master/image/Voca.gif">  
 
