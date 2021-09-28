@@ -34,5 +34,5 @@
 4. Firebase - 기사  및 유저 정보 저장
 
 ## 이미지
-<img src="https://github.com/Yujaeseo/NewsApp/blob/master/image/News.gif" width="850" height="380">  
+<img src="https://github.com/Yujaeseo/NewsApp/blob/master/image/News.gif">  
 
